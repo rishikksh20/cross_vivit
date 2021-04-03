@@ -12,11 +12,16 @@ python train.py -c configs/default.yaml --name "name_of_exp"
 ## Usage :
 ```python
 import torch
-from crossvit import CrossViT
+from cross_vivit import CrossViT
 
-img = torch.ones([1, 3, 224, 224])
-    
-model = CrossViT(image_size = 224, channels = 3, num_classes = 100)
+img = torch.ones([16, 16, 3, 224, 224])
+
+model = CrossViT(224, 3, 1000, 16, 16)
+
+parameters = filter(lambda p: p.requires_grad, model.parameters())
+parameters = sum([np.prod(p.size()) for p in parameters]) / 1_000_000
+print('Trainable Parameters: %.3fM' % parameters)
+
 out = model(img)
 
 print("Shape of out :", out.shape)      # [B, num_classes]
